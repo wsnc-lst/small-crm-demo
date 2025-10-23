@@ -3,8 +3,8 @@
 
 # Docker
 *.log
-db_data/  # Volume DB ถาวร (ไม่ push)
-crm_data/  # Volume CRM
+db_data/  
+crm_data/ 
 
 # PHP Dependencies
 vendor/
