@@ -1,0 +1,30 @@
+# Environment files (ไม่ push password)
+.env
+
+# Docker
+*.log
+db_data/  # Volume DB ถาวร (ไม่ push)
+crm_data/  # Volume CRM
+
+# PHP Dependencies
+vendor/
+composer.lock
+
+# Node (ถ้ามี)
+node_modules/
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Temp Files
+*.tmp
+*.temp
+
+Readme.txt

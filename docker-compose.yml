@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  web:
+    build: .  # ถ้ามี Dockerfile (copy จากเก่า ถ้าต้องการ extensions)
+    # หรือ image: php:8.2-apache  ถ้าไม่ custom
+    container_name: crm-web  # ชื่อใหม่ ไม่ conflict
+    ports:
+      - "8800:80"  # ใช้เดิมได้
+    volumes:
+      - D:/Small-CRM-Projects-Updated-PHP-MySQL/Small-CRM-Projects-Updated-PHP-MySQL/crm:/var/www/html  # แก้ absolute path ตามที่คุณขอ (forward slash สำหรับ Docker)
+    depends_on:
+      - db
+    networks:
+      - crm-net  # network ใหม่
+    restart: always
+
+  db:
+    image: mysql:5.7
+    container_name: crm-db  # ชื่อใหม่
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: crm  # DB ชื่อใหม่ (ไม่กระทบ library)
+    ports:
+      - "3307:3306"  # ใช้เดิมได้
+    volumes:
+      - crm_data:/var/lib/mysql  # volume ใหม่ (แยกจาก db_data ของ library)
+      - ./crm.sql:/docker-entrypoint-initdb.d/crm.sql  # init จาก SQL ใหม่ (สมมติ crm.sql ใน root)
+    networks:
+      - crm-net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: crm-phpmyadmin  # ชื่อใหม่
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${PMA_PASSWORD}  # ใช้ env var (แก้จาก hardcode root)
+    ports:
+      - "8801:80"  # ใช้เดิมได้
+    depends_on:
+      - db
+    networks:
+      - crm-net
+
+networks:
+  crm-net:  # network ใหม่
+
+volumes:
+  crm_data:  # volume ใหม่สำหรับ DB CRM
